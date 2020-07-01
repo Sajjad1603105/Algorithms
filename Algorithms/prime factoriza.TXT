@@ -1,0 +1,23 @@
+ll a[SZ], f[SZ];
+vector <ll> pw[SZ];
+
+void factorize(ll n) {
+    ll sqrtn = sqrt(n);
+ 
+    for(ll i = 0; i < prime.size() && prime[i] <= sqrtn && (n >= SZ || (n<SZ&&status[n]));i++) {
+        if(n%prime[i] == 0) {
+            f[prime[i]]++;
+            ll c = 0;
+ 
+            while(n%prime[i] == 0) {
+                n /= prime[i];
+                c++;
+            }
+            pw[prime[i]].pb(c);
+        }
+    }
+    if(n > 1) {
+        f[n]++;
+        pw[n].pb(1);
+    }
+}

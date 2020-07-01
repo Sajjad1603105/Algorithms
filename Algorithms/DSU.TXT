@@ -1,0 +1,14 @@
+void makeset(ll node)
+{
+    par[node] = node;
+}
+
+ll Find(ll node)
+{
+    if(par[node]==node) return node;
+    return par[node] = Find(par[node]);
+}
+void Union(ll a, ll b)
+{
+    par[Find(b)] = Find(a);
+}

@@ -1,0 +1,41 @@
+void update(ll ind, ll val)
+{
+	block_ind = ind/block_siz;
+	block[block_ind] -= arr[ind];  //change according to problem statement
+	block[block_ind] += val;	 //change according to problem statement
+	arr[ind] = val;
+}
+
+ll query(ll l, ll r)
+{
+	// ll lind = l/block_siz, rind = r/block_siz;
+	ll sum=0;
+	while(l<r and l%block_siz!=0)
+	{
+		sum+=arr[l];
+		l++;
+	}
+	while(l+block_siz<=r)
+	{
+		sum+=block[l/block_siz];
+		l+=block_siz;
+	}
+	while(l<=r)
+	{
+		sum+=arr[l];
+		l++;
+	}
+	return sum;
+}
+
+void preprocess()
+{
+	block_ind = -1;
+	block_siz = sqrt(n);
+	for(ll i=0;i<n;i++)
+	{
+		if(i%block_siz==0)
+			block_ind++;
+		block[block_ind]+=arr[i];  //change according to problem statement
+	}
+} 

@@ -1,0 +1,17 @@
+bool status[SZ];
+vector <ll> prime;
+void sieve(ll n) 
+{
+    status[0] = status[1] = 1;
+    for(int i = 2; i*i <= n; i++) {
+        if(!status[i]) {
+            for(j = i*i; j <= n; j += i) status[j] = 1;
+        }
+    }
+
+    prime.pb(2);
+    for(int i = 3; i <= n; i += 2) {
+        if(!status[i]) prime.pb(i);
+    }
+    sz = prime.size();
+}

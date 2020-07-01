@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb              push_back
+#define ll              long long
+#define ld              long double
+#define N               cout << "\n"
+#define fr(i,n)         for(ll i=0;i<n ;i++)
+#define fr1(i,n)        for(ll i=1;i<=n;i++)
+#define fr2(n,m)        for(ll i=n;i<=m;i++)
+#define co(x)           cout << x
+#define cc(x)           cout << x << " "
+#define cl(x)           cout << x << "\n"
+#define coo(x,z)        cout << x << " " << z <<"\n";
+#define cooo(x,z,k)     cout << x << " " << z << " " << k << "\n"
+#define ms(x,z)         memset(x, z, sizeof(x))
+#define reversed(s)     reverse(s.begin(), s.end())
+#define asort(s)        sort(s.begin(), s.end())
+#define dsort(s)        sort(s.begin(), s.end(),greater<ll>())
+#define pi              pair <ll, ll>
+#define ps              pair <string, ll>
+#define x               first
+#define z               second
+#define FASTREAD        ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define bitcount(n)     __builtin_popcountll(n)
+#define all(s)          s.begin(), s.end()
+
+const ll SZ = 5007;
+const ll mod = 1e9+7;
+ll i,j,k,n,m,x,z,t,b[SZ];
+vector<pi>adj[SZ];
+ll dijkstra(int src)
+{
+    priority_queue< pi, vector <pi> , greater<pi> > pq;
+
+    vector<int> dist(n+7, 1e9);
+
+    pq.push(make_pair(0, src));
+    dist[src] = 0;
+
+    while (!pq.empty())
+    {
+        int u = pq.top().second;
+        pq.pop();
+
+        for(auto i = adj[u].begin(); i != adj[u].end(); ++i)
+        {
+            int v = (*i).first;
+            int weight = (*i).second;
+
+            if (dist[v] > dist[u] + weight)
+            {
+                dist[v] = dist[u] + weight;
+                pq.push(make_pair(dist[v], v));
+            }
+        }
+    }
+    return dist[n];
+}
+
+int main()
+{
+    cin >> t;
+    while(t--)
+    {
+        cin >> n >> m;
+        fr1(i , n) adj[i].clear();
+        while(m--)
+        {
+            cin >> x >> z >> k;
+            adj[x].pb({z,k});
+            adj[z].pb({x,k});
+        }
+        cl(dijkstra(1));
+    }
+}

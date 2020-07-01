@@ -1,0 +1,7 @@
+ll bigmod(ll x, ll y) {
+    if(y == 0) return 1;
+    ll res = bigmod(x, y/2);
+    res = (res *res) % mod;
+    if(y%2 == 1) res = (res * x) % mod;
+    return res;
+}

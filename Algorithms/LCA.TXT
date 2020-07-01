@@ -1,0 +1,52 @@
+void dfs(int from, int node)   
+{
+	for(int i=0;i<vec[node].size();i++)
+	{
+		int v = vec[node][i];
+		if(v==from)
+			continue;
+		// par[v] = node;
+		// depth[v] = depth[node] + 1;
+		dfs(node, v);
+	}
+}
+
+
+void lca_init()
+{
+	memset(spars, -1, sizeof spars);
+
+	for(int i=1;i<=n;i++)
+		spars[i][0] = par[i];
+
+	for(int j=1;(1<<j)<n;j++)
+		for(i=1;i<=n;i++)
+			if(spars[i][j-1]!=-1)
+				spars[i][j] = spars[spars[i][j-1]][j-1];
+}
+
+int lca_query(int p, int q)  //shob int nisi. make them long long if necessary.
+{
+	if(depth[p]<depth[q])
+		swap(p, q);
+	int hi = 1;
+	while(true)
+	{
+		int next = hi+1;
+		if((1<<next)>depth[p])
+			break;
+		hi++;
+	}
+	for(int i=hi;i>=0;i--)
+		if(depth[p]-(1<<i) >= depth[q])
+			p = spars[p][i];
+
+	if(p==q)
+		return p;
+
+	for(int i=hi;i>=0;i--)
+		if(spars[p][i]!=-1 and spars[p][i]!=spars[q][i])
+			p = spars[p][i], q = spars[q][i];
+	
+	return par[p];
+}

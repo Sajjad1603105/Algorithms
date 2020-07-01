@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+ll n,m,t,x,cas,a[20][20],dp[1<<14+2];
+ll call(ll mask)
+{
+    if(mask==(1<<n)-1) return 0;
+    ll &ret = dp[mask];
+    if(ret!=-1) return ret;
+    ret = 1e9;
+    for(ll i=0;i<n;i++)
+    {
+        ll mn=0;
+        if((mask&(1<<i))==0)
+        {
+            mn += a[i][i];
+            for(ll j=0;j<n;j++)
+            {
+                if((mask&(1<<j))!=0)
+                {
+                    mn += a[i][j];
+                }
+            }
+            ret = min(ret,mn+call(mask|(1<<i)));
+        }
+    }
+    return ret;
+}
+int main()
+{
+    cin>>t;
+    while(t--)
+    {
+        memset(dp,-1,sizeof(dp));
+        cin>>n;
+        for(ll i=0;i<n;i++)
+        for(ll j=0;j<n;j++)
+            cin>>a[i][j];
+        cout<<"Case "<<++cas<<": "<<call(0)<<"\n";
+    }
+}

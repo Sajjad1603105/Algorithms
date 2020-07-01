@@ -1,0 +1,88 @@
+void propagate(ll node,ll b, ll e)
+{
+    ll Left = node << 1;
+    ll Right = (node << 1) + 1;
+    ll mid = (b + e) >> 1;
+
+    // update the childs according to prop[node]
+
+    for(int j=0;j<30;j++){
+        if( (prop[node] & (1LL<<j)) != 0) {
+            swap(dp[Left][j][1],dp[Left][j][0]);
+        }
+    }
+
+    for(int j=0;j<30;j++){
+        if( (prop[node] & (1LL<<j)) != 0) {
+            swap(dp[Right][j][1],dp[Right][j][0]);
+        }
+    }
+    // update childs prop[]
+    prop[Left] ^= prop[node];
+    prop[Right] ^= prop[node];
+    prop[node] = 0;
+}
+
+void update(int node, int b, int e, int i, int j,ll x)
+{
+    if (i > e || j < b) return;
+
+    if (b >= i && e <= j)
+    {
+        // update here according to x
+
+        for(int j=0;j<30;j++){
+            if( (x & (1LL<<j)) != 0) {
+                swap(dp[node][j][1],dp[node][j][0]);
+            }
+        }
+        // update nodes prop
+        prop[node] ^= x;
+        return;
+    }
+
+    // jodi prop[node]>0 hoy tahole child gulate jawar age child gula ke prop[node] onujayi update kore nite hobe
+    if(prop[node]) propagate(node,b,e);
+
+    int Left = node * 2;
+    int Right = (node * 2) + 1;
+    int mid = (b + e) / 2;
+    update(Left, b, mid, i, j, x);
+    update(Right, mid + 1, e, i, j, x);
+
+
+    // update present node
+    for(int j=0;j<30;j++)
+    {
+        dp[node][j][1] = dp[Left][j][1] + dp[Right][j][1];
+        dp[node][j][0] = dp[Left][j][0] + dp[Right][j][0];
+    }
+}
+
+ll query(int node, int b, int e,int i,int j)
+{
+    if (i > e || j < b) return 0;
+
+    if (b >= i && e <= j){
+
+        // get the answer from here
+        ll as = 0;
+        for(int j=0;j<30;j++){
+            as += ((1LL<<j) * dp[node][j][1]);
+        }
+        return as;
+    }
+
+    // jodi prop[node]>0 hoy tahole child gulate jawar age child gula ke prop[node] onujayi update kore nite hobe
+
+    if(prop[node]) propagate(node,b,e);
+
+    int Left = node << 1;
+    int Right = (node << 1) + 1;
+    int mid = (b + e) >> 1;
+
+    ll p1 = query(Left, b, mid, i, j);
+    ll p2 = query(Right, mid + 1, e, i, j);
+
+    return p1 + p2;
+}
